@@ -10,11 +10,14 @@ const ccBgColor02 = document.querySelector(
 )
 const ccLogo = document.querySelector(".cc-logo span:nth-child(2) img ")
 
+const ccBg = document.querySelector(".cc")
+
+console.log(ccBgColor01)
 //aqui crio uma função que troca a cor do cartão a partir de uma informação passada para ela
 function setCardType(type) {
   const colors = {
-    visa: ["#2D57F2", "#436D99"],
-    mastercard: ["#C69347", "#DF6F29"],
+    visa: ["#2D57F2", "#436D99", "purple"],
+    mastercard: ["#C69347", "#DF6F29", "green"],
     amex: ["#8439FF", "#8A12C2"],
     default: ["black", "gray"],
   }
@@ -22,6 +25,8 @@ function setCardType(type) {
   ccBgColor01.setAttribute("fill", colors[type][0])
   ccBgColor02.setAttribute("fill", colors[type][1])
   ccLogo.setAttribute("src", `cc-${type}.svg`)
+  ccBg.style.backgroundColor = colors[type][2]
+  ccBg.style.borderRadius = "20px"
 }
 // se eu quisesse executar essa função uma vez só ->  setCardType("mastercard") no próprio arquivo js
 
