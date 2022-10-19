@@ -16,10 +16,10 @@ console.log(ccBgColor01)
 //aqui crio uma função que troca a cor do cartão a partir de uma informação passada para ela
 function setCardType(type) {
   const colors = {
-    visa: ["#2D57F2", "#436D99", "purple"],
-    mastercard: ["#C69347", "#DF6F29", "green"],
-    amex: ["#8439FF", "#8A12C2"],
-    default: ["black", "gray"],
+    visa: ["#5CCEFF", "#4959EC", "#07051B"],
+    mastercard: ["#FFA724", "#F16529", "#FF3C21"],
+    amex: ["#244FEA", "#8F00FF", "#292D98"],
+    default: ["black", "gray", "#212121"],
   }
 
   ccBgColor01.setAttribute("fill", colors[type][0])
@@ -79,22 +79,80 @@ const cardNumberPattern = {
     },
     {
       mask: "0000 0000 0000 0000",
-      regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0-2})\d{0-12}/,
+      regex: /^(5[1-5]\d{0,2}|22[2-9]\d{0,1}|2[3-7]\d{0,2})\d{0,12}/,
       cardtype: "mastercard",
+    },
+    {
+    mask: "0000 0000 0000 0000",
+    regex: /^3[47]\d{0,13}/,
+    cardtype: "amex",
     },
     {
       mask: "0000 0000 0000 0000",
       cardtype: "default",
-    }
+    },
   ],
-  dispatch: function(appended, dynamicMasked) {
+  dispatch: function (appended, dynamicMasked) {
     const number = (dynamicMasked.value + appended).replace(/\D/g, "")
-    const foundMask = dynamicMasked.compiledMasks.find(function(item) {
+    const foundMask = dynamicMasked.compiledMasks.find(function (item) {
       return number.match(item.regex)
     })
 
-    return foundMask;
-
+    return foundMask
   },
 }
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
+
+
+//AULA 3
+
+// Exemplo de função disparada com a ação click
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+  alert("Novo cartão adicionado!")
+})
+//Aqui eu faço a página deixar de carregar cada vez que clica
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault()
+})
+
+// Essa função troca o nome no cartão a partir dos dados colocados no form. Se estiver vazio, volta para o nome padrão
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+
+  ccHolder.innerText = cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
+})
+
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value)
+
+})
+
+function updateSecurityCode(code){
+  const ccSecurity = document.querySelector(".cc-security .value")
+  ccSecurity.innerText = code.length === 0 ? "123" : code
+}
+
+
+cardNumberMasked.on("accept", () => {
+  const cardType = cardNumberMasked.masked.currentMask.cardtype
+  setCardType(cardType)
+  updateCardNumber(cardNumberMasked.value)
+})
+
+function updateCardNumber(number){
+  const ccNumber = document.querySelector(".cc-number")
+
+  ccNumber.innerText = number.length === 0 ? "1234 5678 9012 3456" : number
+}
+
+
+expirationDateMasked.on("accept", () => {
+  updateExpirationDate(expirationDateMasked.value)
+})
+
+function updateExpirationDate(date) {
+  const ccExpiration = document.querySelector(".cc-extra .cc-expiration .value")
+  ccExpiration.innerText = date.length === 0 ? "02/32" : date
+}
