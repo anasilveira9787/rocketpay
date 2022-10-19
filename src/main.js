@@ -12,7 +12,7 @@ const ccLogo = document.querySelector(".cc-logo span:nth-child(2) img ")
 
 const ccBg = document.querySelector(".cc")
 
-console.log(ccBgColor01)
+
 //aqui crio uma função que troca a cor do cartão a partir de uma informação passada para ela
 function setCardType(type) {
   const colors = {
